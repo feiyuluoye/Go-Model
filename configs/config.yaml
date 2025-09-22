@@ -1,0 +1,32 @@
+# gRPC配置
+grpc:
+  address: "localhost"
+  port: 50051
+  timeout: 30
+
+# 数据库配置
+database:
+  host: "localhost"
+  port: 5432
+  name: "regression_db"
+  user: "postgres"
+  password: "password"
+
+# 日志配置
+logging:
+  level: "info"
+  file: "logs/app.log"
+
+# 模型默认参数
+model_defaults:
+  ols:
+    fit_intercept: "true"
+  ridge:
+    alpha: "1.0"
+    fit_intercept: "true"
+  lasso:
+    alpha: "1.0"
+    fit_intercept: "true"
+  logistic:
+    max_iter: "100"
+    learning_rate: "0.01"

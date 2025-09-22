@@ -1,0 +1,33 @@
+# Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Vendor directory
+/vendor/
+
+# Build artifacts
+/bin/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+~$*.docx
+
+# Data directory (raw data storage)
+/data/
+
+# Jupyter Notebook artifacts
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local
