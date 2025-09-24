@@ -31,3 +31,11 @@ Thumbs.db
 # Environment files
 .env
 .env.local
+
+# Go-specific ignores
+go.sum
+coverage.out
+
+# Test artifacts
+*.coverprofile
+_testmain.go

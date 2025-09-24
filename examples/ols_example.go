@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go-model/internal/regression/linear"
+	"github.com/feiyuluoye/Go-Model/internal/regression/linear"
 	"log"
 )
 

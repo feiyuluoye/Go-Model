@@ -4,102 +4,110 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"go-model/pkg/config"
+	"github.com/feiyuluoye/Go-Model/pkg/config"
 	"log"
 	"os"
 	"time"
 )
 
 func main() {
-	// 命令行参数解析
-	configFile := flag.String("config", "configs/config.yaml", "配置文件路径")
-	mode := flag.String("mode", "client", "运行模式: client/server")
-	modelType := flag.String("model", "ols", "模型类型: ols, ridge, lasso, logistic")
-	dataFile := flag.String("data", "", "数据文件路径")
-	action := flag.String("action", "train", "执行动作: train, predict, evaluate, info")
-	serverAddr := flag.String("addr", "localhost:50051", "服务器地址")
+	mode := flag.String("mode", "cli", "Execution mode: cli or grpc")
+	flag.Parse()
+
+	switch *mode {
+	case "cli":
+		runCLI()
+	case "grpc":
+		runServer()
+	default:
+		fmt.Println("Unknown mode, use: -mode cli or -mode grpc")
+		fmt.Println("Usage:")
+		fmt.Println("  GRPC server mode: go run cmd/main.go -mode grpc -config configs/config.yaml")
+		fmt.Println("  CLI mode: go run cmd/main.go -model ols -data data.csv -action train")
+		os.Exit(1)
+	}
+}
+
+func runServer() {
+	fmt.Println("Starting gRPC server...")
+
+	// TODO: Implement server start logic
+	fmt.Println("Server functionality not implemented")
+}
+
+func runCLI() {
+	// Command-line argument parsing
+	configFile := flag.String("config", "configs/config.yaml", "Configuration file path")
+	modelType := flag.String("model", "ols", "Model type: ols, ridge, lasso, logistic")
+	dataFile := flag.String("data", "", "Data file path")
+	action := flag.String("action", "train", "Action to perform: train, predict, evaluate, info")
 
 	flag.Parse()
 
-	// 加载配置
+	// Load configuration
 	cfg, err := config.Load(*configFile)
 	if err != nil {
-		log.Printf("警告: 加载配置失败: %v, 使用默认配置", err)
+		log.Printf("Warning: Failed to load configuration: %v, using default configuration", err)
 		cfg = config.DefaultConfig()
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	switch *mode {
-	case "server":
-		runServer(cfg)
-	case "client":
-		runClient(ctx, cfg, *modelType, *dataFile, *action, *serverAddr)
+	fmt.Printf("CLI mode: Model type=%s, Data file=%s, Action=%s\n", *modelType, *dataFile, *action)
+
+	switch *action {
+	case "train":
+		runTrain(ctx, cfg, *modelType, *dataFile)
+	case "predict":
+		runPredict(ctx, cfg, *modelType, *dataFile)
+	case "evaluate":
+		runEvaluate(ctx, cfg, *modelType, *dataFile)
+	case "info":
+		runModelInfo(ctx, cfg, *modelType)
 	default:
-		fmt.Println("未知模式，使用: -mode client 或 -mode server")
-		fmt.Println("用法:")
-		fmt.Println("  服务器模式: go run cmd/main.go -mode server -config configs/config.yaml")
-		fmt.Println("  客户端模式: go run cmd/main.go -mode client -model ols -data data.csv -action train")
+		fmt.Println("Unknown action, use: -action train, predict, evaluate, info")
+		printUsage()
 		os.Exit(1)
 	}
 }
 
-func runServer(cfg *config.Config) {
-	fmt.Printf("启动gRPC服务器在 %s:%d...\n", cfg.GRPC.Address, cfg.GRPC.Port)
-
-	// TODO: 实现服务器启动逻辑
-	fmt.Println("服务器功能尚未实现")
+func runTrain(ctx context.Context, cfg *config.Config, modelType, dataFile string) {
+	fmt.Printf("Training %s model...\n", modelType)
+	fmt.Println("Training functionality not implemented")
 }
 
-func runClient(ctx context.Context, cfg *config.Config, modelType, dataFile, action, serverAddr string) {
-	fmt.Printf("客户端模式: 模型类型=%s, 数据文件=%s, 操作=%s\n", modelType, dataFile, action)
-
-	// TODO: 实现客户端逻辑
-	fmt.Println("客户端功能尚未实现")
+func runPredict(ctx context.Context, cfg *config.Config, modelType, dataFile string) {
+	fmt.Printf("Using %s model for prediction...\n", modelType)
+	fmt.Println("Prediction functionality not implemented")
 }
 
-func runTrain(modelType, dataFile string) error {
-	fmt.Printf("训练 %s 模型...\n", modelType)
-	fmt.Println("训练功能尚未实现")
-	return nil
+func runEvaluate(ctx context.Context, cfg *config.Config, modelType, dataFile string) {
+	fmt.Printf("Evaluating %s model...\n", modelType)
+	fmt.Println("Evaluation functionality not implemented")
 }
 
-func runPredict(modelType, dataFile string) error {
-	fmt.Printf("使用 %s 模型进行预测...\n", modelType)
-	fmt.Println("预测功能尚未实现")
-	return nil
+func runModelInfo(ctx context.Context, cfg *config.Config, modelType string) {
+	fmt.Printf("Getting information about %s model...\n", modelType)
+	fmt.Println("Model information functionality not implemented")
 }
 
-func runEvaluate(modelType, dataFile string) error {
-	fmt.Printf("评估 %s 模型...\n", modelType)
-	fmt.Println("评估功能尚未实现")
-	return nil
-}
-
-func runModelInfo(modelType string) error {
-	fmt.Printf("获取 %s 模型信息...\n", modelType)
-	fmt.Println("模型信息功能尚未实现")
-	return nil
-}
-
-// printUsage 显示使用说明
+// printUsage displays usage instructions
 func printUsage() {
-	fmt.Println("Go Regression Library - 命令行工具")
+	fmt.Println("Go Regression Library - Command-line tool")
 	fmt.Println()
-	fmt.Println("用法:")
-	fmt.Println("  go run cmd/main.go [选项]")
+	fmt.Println("Usage:")
+	fmt.Println("  go run cmd/main.go [options]")
 	fmt.Println()
-	fmt.Println("选项:")
-	fmt.Println("  -mode string      运行模式: client/server (默认 \"client\")")
-	fmt.Println("  -config string    配置文件路径 (默认 \"configs/config.yaml\")")
-	fmt.Println("  -model string     模型类型: ols, ridge, lasso, logistic (默认 \"ols\")")
-	fmt.Println("  -data string      数据文件路径")
-	fmt.Println("  -action string    执行动作: train, predict, evaluate, info (默认 \"train\")")
-	fmt.Println("  -addr string      服务器地址 (默认 \"localhost:50051\")")
+	fmt.Println("Options:")
+	fmt.Println("  -mode string      Execution mode: cli or grpc (default \"cli\")")
+	fmt.Println("  -config string    Configuration file path (default \"configs/config.yaml\")")
+	fmt.Println("  -model string     Model type: ols, ridge, lasso, logistic (default \"ols\")")
+	fmt.Println("  -data string      Data file path")
+	fmt.Println("  -action string    Action to perform: train, predict, evaluate, info (default \"train\")")
 	fmt.Println()
-	fmt.Println("示例:")
-	fmt.Println("  启动服务器: go run cmd/main.go -mode server")
-	fmt.Println("  训练模型: go run cmd/main.go -model ols -data data.csv -action train")
-	fmt.Println("  进行预测: go run cmd/main.go -model ols -data test.csv -action predict")
+	fmt.Println("Examples:")
+	fmt.Println("  Start server: go run cmd/main.go -mode grpc")
+	fmt.Println("  Train model: go run cmd/main.go -model ols -data data.csv -action train")
+	fmt.Println("  Make prediction: go run cmd/main.go -model ols -data test.csv -action predict")
 }
