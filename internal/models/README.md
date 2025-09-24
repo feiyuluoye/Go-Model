@@ -94,20 +94,6 @@ if err != nil {
 }
 ```
 
-## 迁移指南
-
-如果你之前使用了 `internal/core` 或 `internal/regression` 中的模型，请按以下方式迁移：
-
-### 旧代码
-```go
-// 旧的core包
-import "github.com/feiyuluoye/Go-Model/internal/core"
-model := core.NewOLSModel(true)
-
-// 旧的regression包
-import "github.com/feiyuluoye/Go-Model/internal/regression/linear"
-model := linear.NewOLS(true)
-```
 
 ### 新代码
 ```go

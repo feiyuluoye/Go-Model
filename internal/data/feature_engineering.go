@@ -3,7 +3,7 @@ package data
 import (
 	"errors"
 	"fmt"
-	"go-model/pkg/types"
+	"github.com/feiyuluoye/Go-Model/internal/types"
 	"math"
 )
 

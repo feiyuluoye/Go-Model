@@ -2,7 +2,7 @@ package data
 
 import (
 	"errors"
-	"go-model/pkg/types"
+	"github.com/feiyuluoye/Go-Model/internal/types"
 	"math/rand"
 	"time"
 )
